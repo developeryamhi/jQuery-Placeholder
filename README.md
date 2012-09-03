@@ -35,3 +35,9 @@ Available Options
     search_label: false       //  Search Placeholder text from 'label' before or after the input field
     search_label_order: 'before,after'  //  Order to Search 'label'
     check_parent: false       //  Check if parent element is 'label' and retrieve placeholder text
+
+
+Credit
+======
+
+Copyright 2012, Biraj Pandey ( http://www.powerfuldevelopment.com )
