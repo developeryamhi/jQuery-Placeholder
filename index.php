@@ -7,6 +7,7 @@
 <script>
 $(document).ready(function() {
     $(".text-input").placeholder();
+    $(".textarea").placeholder();
 });
 </script>
 </head>
@@ -14,7 +15,12 @@ $(document).ready(function() {
 
 <label for="text1">
     Input:
-    <input type="text" name="text1" id="text1" class="text-input" value="value is this" placeholder="Value" />
+    <input type="text" name="text1" id="text1" class="text-input" value="Default Value" placeholder="Input Value" />
+</label>
+
+<label for="textarea1">
+    Textarea:
+    <textarea name="textarea1" id="textarea1" class="textarea" placeholder="Textarea Value">Default Value</textarea>
 </label>
 
 </body>

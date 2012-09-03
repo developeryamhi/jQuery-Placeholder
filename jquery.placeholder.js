@@ -46,7 +46,8 @@
             month:'',password:'',range:'',tel:'',time:'',url:'',week:''};
 
         return this.each(function() {
-            if(this.nodeName!='INPUT' || !(this.getAttribute('type') in validTypes))  return;
+            if((this.nodeName!='INPUT' && !(this.getAttribute('type') in validTypes)) && this.nodeName!='TEXTAREA')
+                return;
             var $this = $(this);
             this.settings = settings;
             var hText = findHText($this, this.settings);
@@ -59,7 +60,8 @@
 
         function setupPlaceholder($elem, hText) {
             var $span = $("<span>" + hText + "</span>");
-            $span.css({position:'absolute',top:'2px',left:'4px','line-height':$elem[0].offsetHeight+'px',color:settings.color,cursor:'text'});
+            $span.css({position:'absolute',top:'2px',left:'4px',color:settings.color,cursor:'text','font-size':$elem.css('font-size')});
+            if($elem[0].nodeName=='INPUT')  $span.css('line-height',$elem[0].offsetHeight+'px');
             for(var i in settings.override_css)
                 $span.css(i, settings.override_css[i]);
             for(var j in settings[isBrowser + '_override_css'])
@@ -70,7 +72,7 @@
             $pwrap.css('position', 'relative');
             $elem.data('placeholder_text', hText);
             $elem.replaceWith($pwrap);
-            $pwrap.find('input').keyup(function(e) {
+            $pwrap.find($elem[0].nodeName.toLowerCase()).keyup(function(e) {
                 if($(this).val().length>0) {
                     $(this).next().hide(0);
                 } else {
@@ -78,7 +80,7 @@
                 }
                 return true;
             });
-            $pwrap.find('input').keyup();
+            $pwrap.find($elem[0].nodeName.toLowerCase()).keyup();
         }
 
         function findHText($elem) {
