@@ -8,14 +8,14 @@ Placeholder Plugin for jQuery by Biraj Pandey
 Examples:
 =========
 
-//  Default
-$("input[type=text]").placeholder();
-
-//  With Fallback text for Browers with no support to placeholder
-$("input[type=text]").placeholder({fallback_text:'Placeholder Text'});
-
-//  Set or Override Existing Placeholder Text
-$("input[type=text]").placeholder({text:'Placeholder Text'});
+    //  Default
+    $("input[type=text]").placeholder();
+    
+    //  With Fallback text for Browers with no support to placeholder
+    $("input[type=text]").placeholder({fallback_text:'Placeholder Text'});
+    
+    //  Set or Override Existing Placeholder Text
+    $("input[type=text]").placeholder({text:'Placeholder Text'});
 
 
 Available Options
