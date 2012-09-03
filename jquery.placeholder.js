@@ -25,9 +25,14 @@
             check_parent: false
         }, options);
 
-        var testNode = document.createElement('input');
-        var pSupported = ('placeholder' in testNode);
-        if(settings.force===true)   pSupported = false;
+        var testInput = document.createElement('input');
+        var testTextarea = document.createElement('textarea');
+        var pInputSupported = ('placeholder' in testInput);
+        var pTextareaSupported = ('placeholder' in testTextarea);
+        if(settings.force===true) {
+            pInputSupported = false;
+            pTextareaSupported = false;
+        }
 
         var navi = navigator.userAgent.toLowerCase();
         var isBrowser = 'others';
@@ -48,10 +53,11 @@
         return this.each(function() {
             if((this.nodeName!='INPUT' && !(this.getAttribute('type') in validTypes)) && this.nodeName!='TEXTAREA')
                 return;
+            var node = this.nodeName.toLowerCase();
             var $this = $(this);
             this.settings = settings;
             var hText = findHText($this, this.settings);
-            if(pSupported) {
+            if((node=='input' && pInputSupported) || (node=='textarea' && pTextareaSupported)) {
                 $this.attr('placeholder', hText);
             } else {
                 setupPlaceholder($this, hText, settings);
@@ -84,7 +90,7 @@
         }
 
         function findHText($elem) {
-            var hText = (pSupported && $elem.attr('placeholder') && $elem.attr('placeholder').length>0) ? $elem.attr('placeholder') : $elem[0].getAttribute('placeholder');
+            var hText = ($elem.attr('placeholder') && $elem.attr('placeholder').length>0) ? $elem.attr('placeholder') : $elem[0].getAttribute('placeholder');
             if(settings.text!='')   hText = settings.text;
             if(hText=='' && settings.search_for && $elem.attr('id')) {
                 var $forElem = $("label[for=" + $elem.attr('id') + "]");
