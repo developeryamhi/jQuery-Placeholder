@@ -3,7 +3,7 @@
 <head>
 <title>Placeholder jQuery Plugin</title>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
-<script src="jquery.placeholder.js"></script>
+<script src="jquery.placeholder.min.js"></script>
 <script>
 $(document).ready(function() {
     $(".text-input").placeholder();
