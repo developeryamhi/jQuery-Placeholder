@@ -4,7 +4,6 @@ jQuery-Placeholder
 Placeholder Plugin for jQuery by Biraj Pandey
 
 
-
 Examples:
 =========
 
