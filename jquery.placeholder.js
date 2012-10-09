@@ -60,6 +60,7 @@
             if((node=='input' && pInputSupported) || (node=='textarea' && pTextareaSupported)) {
                 $this.attr('placeholder', hText);
             } else {
+				if(settings.force)	$this.attr('placeholder', '');
                 setupPlaceholder($this, hText, settings);
             }
         });
