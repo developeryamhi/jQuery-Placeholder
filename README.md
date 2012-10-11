@@ -8,16 +8,13 @@ Examples:
 =========
 
     //  Default
-    $("input[type=text]").placeholder();
-    $("textarea").placeholder();
+    $("input[type=text], textarea").placeholder();
     
     //  With Fallback text for Browers with no support to placeholder
-    $("input[type=text]").placeholder({fallback_text:'Placeholder Text'});
-    $("textarea").placeholder({fallback_text:'Placeholder Text'});
+    $("input[type=text], textarea").placeholder({fallback_text:'Placeholder Text'});
     
     //  Set or Override Existing Placeholder Text
-    $("input[type=text]").placeholder({text:'Placeholder Text'});
-    $("textarea").placeholder({text:'Placeholder Text'});
+    $("input[type=text], textarea").placeholder({text:'Placeholder Text'});
 
 
 Available Options

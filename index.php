@@ -6,8 +6,7 @@
 <script src="jquery.placeholder.min.js"></script>
 <script>
 $(document).ready(function() {
-    $(".text-input").placeholder();
-    $(".textarea").placeholder();
+    $(".text-input, .textarea").placeholder();
 });
 </script>
 </head>
@@ -15,12 +14,12 @@ $(document).ready(function() {
 
 <label for="text1">
     Input:
-    <input type="text" name="text1" id="text1" class="text-input" value="Default Value" placeholder="Input Value" />
+    <input type="text" name="text1" id="text1" class="text-input" placeholder="Input Value" />
 </label>
 
 <label for="textarea1">
     Textarea:
-    <textarea name="textarea1" id="textarea1" class="textarea" placeholder="Textarea Value">Default Value</textarea>
+    <textarea name="textarea1" id="textarea1" class="textarea" placeholder="Textarea Value"></textarea>
 </label>
 
 </body>
