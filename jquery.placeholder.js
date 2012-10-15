@@ -92,6 +92,7 @@
 
         function findHText($elem) {
             var hText = ($elem.attr('placeholder') && $elem.attr('placeholder').length>0) ? $elem.attr('placeholder') : $elem[0].getAttribute('placeholder');
+			if(!hText || hText==undefined)	hText = '';
             if(settings.text!='')   hText = settings.text;
             if(hText=='' && settings.search_for && $elem.attr('id')) {
                 var $forElem = $("label[for=" + $elem.attr('id') + "]");
