@@ -56,12 +56,12 @@
             var node = this.nodeName.toLowerCase();
             var $this = $(this);
             this.settings = settings;
-            var hText = findHText($this, this.settings);
+            var hText = findHText($this);
             if((node=='input' && pInputSupported) || (node=='textarea' && pTextareaSupported)) {
                 $this.attr('placeholder', hText);
             } else {
 				if(settings.force)	$this.attr('placeholder', '');
-                setupPlaceholder($this, hText, settings);
+                setupPlaceholder($this, hText);
             }
         });
 
