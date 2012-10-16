@@ -21,14 +21,15 @@
 		text: '',
 		fallback_text: '',
 		force: false,
+		forceOn: undefined,
 		color: '#888',
-		override_css: {},
-		ie_override_css: {},
-		ff_override_css: {},
-		ch_override_css: {},
-		op_override_css: {},
-		sa_override_css: {},
-		others_override_css: {},
+		css: {},
+		explorer_css: {},
+		firefox_css: {},
+		chrome_css: {},
+		opera_css: {},
+		safari_css: {},
+		others_css: {},
 		search_for: false,
 		search_label: false,
 		search_label_order: 'before,after',
@@ -58,24 +59,43 @@
 			var pInputSupported = ('placeholder' in testInput);
 			var pTextareaSupported = ('placeholder' in testTextarea);
 
+			//	Detect Browser
+			var navi = navigator.userAgent.toLowerCase();
+			if(navi.indexOf("firefox") > -1)
+				placeholder._browser = 'firefox';
+			else if(navi.indexOf("opera") > -1)
+				placeholder._browser = 'opera';
+			else if(navi.indexOf("chrome") > -1)
+				placeholder._browser = 'chrome';
+			else if(navi.indexOf("msie") > -1)
+				placeholder._browser = 'explorer';
+			else if(navi.indexOf("safari") > -1)
+				placeholder._browser = 'safari';
+
+			//	Check for Custom Browser Force
+			if(settings.forceOn!=undefined && settings.forceOn!='') {
+
+				//	Force Browsers
+				var fbs = settings.forceOn.split(',');
+
+				//	Loop
+				for(var i=0; i<fbs.length; i++) {
+
+					//	Check if Browser Detected
+					if(fbs[i]==placeholder._browser) {
+
+						//	Set Force
+						settings.force = true;
+						break;
+					}
+				}
+			}
+
 			//	Force Placeholder
 			if(settings.force===true) {
 				pInputSupported = false;
 				pTextareaSupported = false;
 			}
-
-			//	Detect Browser
-			var navi = navigator.userAgent.toLowerCase();
-			if(navi.indexOf("firefox") > -1)
-				placeholder._browser = 'ff';
-			else if(navi.indexOf("opera") > -1)
-				placeholder._browser = 'op';
-			else if(navi.indexOf("chrome") > -1)
-				placeholder._browser = 'ch';
-			else if(navi.indexOf("msie") > -1)
-				placeholder._browser = 'ie';
-			else if(navi.indexOf("safari") > -1)
-				placeholder._browser = 'sa';
 
 			//	Loop Through Each Elements
 			return this.each(function() {
@@ -119,10 +139,10 @@
             var $span = $("<span>" + hText + "</span>");
             $span.css({position:'absolute',top:'2px',left:'4px',color:settings.color,cursor:'text','font-size':$elem.css('font-size'),cursor:'text'});
             if($elem[0].nodeName=='INPUT') $span.css('line-height',$elem[0].offsetHeight+'px');
-            for(var i in settings.override_css)
+            for(var i in settings.css)
                 $span.css(i, settings.override_css[i]);
-            for(var j in settings[placeholder._browser + '_override_css'])
-                $span.css(j, settings[placeholder._browser + '_override_css'][j]);
+            for(var j in settings[placeholder._browser + '_css'])
+                $span.css(j, settings[placeholder._browser + '_css'][j]);
             var $pwrap = $("<div class='placeholder-wrapper'></div>");
             $pwrap.append($elem.clone());
             $pwrap.append($span);
@@ -143,8 +163,8 @@
 				e.preventDefault();
 				return false;
 			});
-			settings.holder_elem($pwrap);
-			settings.placeholder_elem($span);
+			settings.holder_elem($pwrap, placeholder._browser);
+			settings.placeholder_elem($span, placeholder._browser);
         },
 
 		//	Find the Holder Text for Element
