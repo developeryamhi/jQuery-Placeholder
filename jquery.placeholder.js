@@ -109,6 +109,9 @@
 				//	Get Element Object
 				var $this = $(this);
 
+				//	Check if Already an Instance of Placeholder
+				if($this.parent().hasClass('placeholder-wrapper'))	return;
+
 				//	Store Settings
 				$.data($this, 'placeholder-settings', settings);
 
