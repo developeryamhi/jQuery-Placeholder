@@ -6,78 +6,128 @@
 
 (function($) {
 
-    $.fn.placeholder = function(options) {
-        var settings = $.extend( {
-            text: '',
-            fallback_text: '',
-            force: false,
-            color: '#888',
-            override_css: {},
-            ie_override_css: {},
-            ff_override_css: {},
-            ch_override_css: {},
-            op_override_css: {},
-            sa_override_css: {},
-            others_override_css: {},
-            search_for: false,
-            search_label: false,
-            search_label_order: 'before,after',
-            check_parent: false
-        }, options);
+	$.fn.placeholder = function(method) {
+		if (placeholder[method] && method.substr(0, 1)!='_') {
+			return placeholder[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
+		} else if (typeof method === 'object' || !method) {
+			return placeholder.init.apply( this, arguments );
+		} else {
+			$.error( 'Method ' +  method + ' does not exist on jQuery.placeholder' );
+		}
+	}
 
-        var testInput = document.createElement('input');
-        var testTextarea = document.createElement('textarea');
-        var pInputSupported = ('placeholder' in testInput);
-        var pTextareaSupported = ('placeholder' in testTextarea);
-        if(settings.force===true) {
-            pInputSupported = false;
-            pTextareaSupported = false;
-        }
+	$.placeholder = {};
+	$.placeholder.defaults = {
+		text: '',
+		fallback_text: '',
+		force: false,
+		color: '#888',
+		override_css: {},
+		ie_override_css: {},
+		ff_override_css: {},
+		ch_override_css: {},
+		op_override_css: {},
+		sa_override_css: {},
+		others_override_css: {},
+		search_for: false,
+		search_label: false,
+		search_label_order: 'before,after',
+		check_parent: false,
+		holder_elem: function() {},
+		placeholder_elem: function() {}
+	};
 
-        var navi = navigator.userAgent.toLowerCase();
-        var isBrowser = 'others';
-        if(navi.indexOf("firefox") > -1)
-            isBrowser = 'ff';
-        else if(navi.indexOf("opera") > -1)
-            isBrowser = 'op';
-        else if(navi.indexOf("chrome") > -1)
-            isBrowser = 'ch';
-        else if(navi.indexOf("msie") > -1)
-            isBrowser = 'ie';
-        else if(navi.indexOf("safari") > -1)
-            isBrowser = 'sa';
+	//	Placeholder Library
+	var placeholder = {
 
-        var validTypes = {text:'',email:'',number:'',color:'',date:'',datetime:'','datetime-local':'',
-            month:'',password:'',range:'',tel:'',time:'',url:'',week:''};
+		//	Browser
+		_browser: 'others',
 
-        return this.each(function() {
-            if((this.nodeName!='INPUT' && !(this.getAttribute('type') in validTypes)) && this.nodeName!='TEXTAREA')
-                return;
-            var node = this.nodeName.toLowerCase();
-            var $this = $(this);
-            this.settings = settings;
-            var hText = findHText($this);
-            if((node=='input' && pInputSupported) || (node=='textarea' && pTextareaSupported)) {
-                $this.attr('placeholder', hText);
-            } else {
-				if(settings.force)	$this.removeAttr('placeholder');
-                setupPlaceholder($this, hText);
-            }
-        });
+		//	Valid Input Types
+		_validTypes: {text:'',email:'',number:'',color:'',date:'',datetime:'','datetime-local':'', month:'',password:'',range:'',tel:'',time:'',url:'',week:''},
 
-        function setupPlaceholder($elem, hText) {
+		//	Init Placeholder
+		init: function(options) {
+
+			//	Resolve Settings
+			var settings = $.extend($.placeholder.defaults, options);
+
+			//	Create Input and Textarea for Testing
+			var testInput = document.createElement('input');
+			var testTextarea = document.createElement('textarea');
+			var pInputSupported = ('placeholder' in testInput);
+			var pTextareaSupported = ('placeholder' in testTextarea);
+
+			//	Force Placeholder
+			if(settings.force===true) {
+				pInputSupported = false;
+				pTextareaSupported = false;
+			}
+
+			//	Detect Browser
+			var navi = navigator.userAgent.toLowerCase();
+			if(navi.indexOf("firefox") > -1)
+				placeholder._browser = 'ff';
+			else if(navi.indexOf("opera") > -1)
+				placeholder._browser = 'op';
+			else if(navi.indexOf("chrome") > -1)
+				placeholder._browser = 'ch';
+			else if(navi.indexOf("msie") > -1)
+				placeholder._browser = 'ie';
+			else if(navi.indexOf("safari") > -1)
+				placeholder._browser = 'sa';
+
+			//	Loop Through Each Elements
+			return this.each(function() {
+
+				//	Check if Element Supports Placeholder
+				if((this.nodeName!='INPUT' && !(this.getAttribute('type') in placeholder._validTypes)) && this.nodeName!='TEXTAREA')	return;
+
+				//	Get Element Node Type
+				var node = this.nodeName.toLowerCase();
+
+				//	Get Element Object
+				var $this = $(this);
+
+				//	Store Settings
+				$.data($this, 'placeholder-settings', settings);
+
+				//	Find the Holder Text
+				var hText = placeholder._find($this);
+
+				//	Display the Placeholder
+				if((node=='input' && pInputSupported) || (node=='textarea' && pTextareaSupported)) {
+					$this.attr('placeholder', hText);
+				} else {
+					if(settings.force)	$this.removeAttr('placeholder');
+					placeholder._setup($this, hText);
+				}
+			});
+		},
+
+		holderElement: function() {
+			return $(this).parent();
+		},
+
+		placeholderElement: function() {
+			return $(this).next();
+		},
+
+		//	Setup Custom Placeholder
+		_setup: function($elem, hText) {
+			var settings = $.data($elem, 'placeholder-settings');
             var $span = $("<span>" + hText + "</span>");
             $span.css({position:'absolute',top:'2px',left:'4px',color:settings.color,cursor:'text','font-size':$elem.css('font-size'),cursor:'text'});
             if($elem[0].nodeName=='INPUT') $span.css('line-height',$elem[0].offsetHeight+'px');
             for(var i in settings.override_css)
                 $span.css(i, settings.override_css[i]);
-            for(var j in settings[isBrowser + '_override_css'])
-                $span.css(j, settings[isBrowser + '_override_css'][j]);
+            for(var j in settings[placeholder._browser + '_override_css'])
+                $span.css(j, settings[placeholder._browser + '_override_css'][j]);
             var $pwrap = $("<div class='placeholder-wrapper'></div>");
             $pwrap.append($elem.clone());
             $pwrap.append($span);
             $pwrap.css('position', 'relative');
-            $elem.data('placeholder_text', hText);
+            $elem.data('placeholder-text', hText);
             $elem.replaceWith($pwrap);
             $pwrap.find($elem[0].nodeName.toLowerCase()).keyup(function(e) {
                 if($(this).val().length>0) {
@@ -88,14 +138,18 @@
                 return true;
             });
             $pwrap.find($elem[0].nodeName.toLowerCase()).keyup();
-			$pwrap.on('click', function(e) {
+			$pwrap.click(function(e) {
 				$(this).find("span").prev().focus();
 				e.preventDefault();
 				return false;
 			});
-        }
+			settings.holder_elem($pwrap);
+			settings.placeholder_elem($span);
+        },
 
-        function findHText($elem) {
+		//	Find the Holder Text for Element
+        _find: function($elem) {
+			var settings = $.data($elem, 'placeholder-settings');
             var hText = ($elem.attr('placeholder') && $elem.attr('placeholder').length>0) ? $elem.attr('placeholder') : $elem[0].getAttribute('placeholder');
 			if(!hText || hText==undefined)	hText = '';
             if(settings.text!='') hText = settings.text;
@@ -129,4 +183,5 @@
             return hText;
         }
     };
+
 })(jQuery);

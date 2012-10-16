@@ -32,8 +32,16 @@ Available Options
     others_override_css: {}   //  Unknown Browsers CSS Properties for Custom Placeholder
     search_for: false         //  Search Placeholder text from 'label' with 'for' attribute for the input field
     search_label: false       //  Search Placeholder text from 'label' before or after the input field
-    search_label_order: 'before,after'  //  Order to Search 'label'
-    check_parent: false       //  Check if parent element is 'label' and retrieve placeholder text
+    search_label_order: 'before,after'  		//  Order to Search 'label'
+    check_parent: false       					//  Check if parent element is 'label' and retrieve placeholder text
+	holder_elem: function($elem) {}				//	Callback for Main Holder Element for Custom Placeholder
+	placeholder_elem: function($elem) {}		//	Callback for Placeholder Element
+
+
+Available Methods
+=================
+	$(SELECTOR).placeholder('holderElement');			//	Returns Main Holder Element for Custom Placeholder
+	$(SELECTOR).placeholder('placeholderElement');		//	Returns Custom Placeholder Element
 
 
 Credit
