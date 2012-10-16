@@ -22,6 +22,7 @@ Available Options
     text: ''                  	//  Sets or Overrides Existing Placeholder Text
     fallback_text: ''         	//  Fallback Text for Browser who do not support placeholder attribute
     force: false              	//  Force Custom Placerholder on every browser
+	forceOn: 'safari,explorer'	//	Force Only on Specific Browser
     color: '#888'             	//  Text Color for Custom Placeholder Text
     css: {}						//  Global CSS Properties for Custom Placeholder
     explorer_css: {}       		//  IE CSS Properties for Custom Placeholder
