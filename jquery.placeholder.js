@@ -1,8 +1,8 @@
 /*!
- * jQuery placeholder plugin: simple placeholder fix for every browser
- * For Examples and documentation: http://www.powerfuldevelopment.com
- * Authors: Biraj Pandey
- */
+* jQuery placeholder plugin: simple placeholder fix for every browser
+* For Examples and documentation: http://www.powerfuldevelopment.com
+* Authors: Biraj Pandey
+*/
 
 (function($) {
 
@@ -60,7 +60,7 @@
             if((node=='input' && pInputSupported) || (node=='textarea' && pTextareaSupported)) {
                 $this.attr('placeholder', hText);
             } else {
-				if(settings.force)	$this.attr('placeholder', '');
+				if(settings.force)	$this.removeAttr('placeholder');
                 setupPlaceholder($this, hText);
             }
         });
@@ -68,7 +68,7 @@
         function setupPlaceholder($elem, hText) {
             var $span = $("<span>" + hText + "</span>");
             $span.css({position:'absolute',top:'2px',left:'4px',color:settings.color,cursor:'text','font-size':$elem.css('font-size'),cursor:'text'});
-            if($elem[0].nodeName=='INPUT')  $span.css('line-height',$elem[0].offsetHeight+'px');
+            if($elem[0].nodeName=='INPUT') $span.css('line-height',$elem[0].offsetHeight+'px');
             for(var i in settings.override_css)
                 $span.css(i, settings.override_css[i]);
             for(var j in settings[isBrowser + '_override_css'])
@@ -88,19 +88,20 @@
                 return true;
             });
             $pwrap.find($elem[0].nodeName.toLowerCase()).keyup();
-			$pwrap.click(function() {
-				$elem.focus();
-				$pwrap.find($elem[0].nodeName.toLowerCase()).keyup();
+			$pwrap.on('click', function(e) {
+				$(this).find("span").prev().focus();
+				e.preventDefault();
+				return false;
 			});
         }
 
         function findHText($elem) {
             var hText = ($elem.attr('placeholder') && $elem.attr('placeholder').length>0) ? $elem.attr('placeholder') : $elem[0].getAttribute('placeholder');
 			if(!hText || hText==undefined)	hText = '';
-            if(settings.text!='')   hText = settings.text;
+            if(settings.text!='') hText = settings.text;
             if(hText=='' && settings.search_for && $elem.attr('id')) {
                 var $forElem = $("label[for=" + $elem.attr('id') + "]");
-                if($forElem.length>0)   hText = $forElem.text();
+                if($forElem.length>0) hText = $forElem.text();
             }
             if(hText=='' && settings.search_label) {
                 var sorders = settings.search_label_order.split(',');
@@ -123,7 +124,7 @@
                 if($elem.parent()[0].nodeName=='LABEL')
                     hText = $elem.parent().text();
             }
-            if(hText=='')   hText = settings.fallback_text;
+            if(hText=='') hText = settings.fallback_text;
             hText = hText.replace(/ +(?= )/g, '').replace(/\:/g, '');
             return hText;
         }
