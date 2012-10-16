@@ -67,7 +67,7 @@
 
         function setupPlaceholder($elem, hText) {
             var $span = $("<span>" + hText + "</span>");
-            $span.css({position:'absolute',top:'2px',left:'4px',color:settings.color,cursor:'text','font-size':$elem.css('font-size')});
+            $span.css({position:'absolute',top:'2px',left:'4px',color:settings.color,cursor:'text','font-size':$elem.css('font-size'),cursor:'text'});
             if($elem[0].nodeName=='INPUT')  $span.css('line-height',$elem[0].offsetHeight+'px');
             for(var i in settings.override_css)
                 $span.css(i, settings.override_css[i]);
@@ -88,6 +88,10 @@
                 return true;
             });
             $pwrap.find($elem[0].nodeName.toLowerCase()).keyup();
+			$pwrap.click(function() {
+				$elem.focus();
+				$pwrap.find($elem[0].nodeName.toLowerCase()).keyup();
+			});
         }
 
         function findHText($elem) {
