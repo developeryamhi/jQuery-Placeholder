@@ -49,3 +49,7 @@ Credit
 ======
 
 Copyright 2012, Biraj Pandey ( http://www.powerfuldevelopment.com )
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/developeryamhi/jquery-placeholder/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
